@@ -10,7 +10,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
@@ -18,46 +18,62 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    min-height:100vh;
 }
 
 .container{
     width:90%;
-    max-width:500px;
+    max-width:550px;
     background:#1e293b;
-    padding:25px;
     border-radius:15px;
-    box-shadow:0 0 20px rgba(0,0,0,.5);
+    padding:20px;
+    box-shadow:0 0 20px rgba(0,0,0,.4);
+}
+
+.banner{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom:15px;
 }
 
 h1{
     color:#38bdf8;
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:15px;
+}
+
+#progress{
+    color:#facc15;
+    text-align:right;
+    margin-bottom:10px;
 }
 
 #question{
     color:white;
-    font-size:20px;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 .option{
-    display:block;
     width:100%;
     padding:12px;
-    margin:10px 0;
+    margin:8px 0;
     border:none;
     border-radius:8px;
     background:#334155;
     color:white;
+    font-size:16px;
     cursor:pointer;
     transition:.3s;
-    font-size:16px;
 }
 
 .option:hover{
-    background:#3b82f6;
+    background:#2563eb;
+}
+
+.option:disabled{
+    cursor:not-allowed;
 }
 
 #nextBtn,#restartBtn{
@@ -72,29 +88,39 @@ h1{
     cursor:pointer;
 }
 
+#nextBtn:disabled{
+    background:#64748b;
+    cursor:not-allowed;
+}
+
 #score{
-    color:#facc15;
     text-align:center;
-    font-size:22px;
+    color:#facc15;
+    font-size:24px;
     margin-top:20px;
 }
 </style>
 
 </head>
-
 <body>
 
 <div class="container">
+
+<img class="banner"
+src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800"
+alt="Quiz Banner">
 
 <h1>Quiz Game</h1>
 
 <div id="quiz">
 
+<div id="progress"></div>
+
 <h2 id="question"></h2>
 
 <div id="options"></div>
 
-<button id="nextBtn">Next</button>
+<button id="nextBtn" disabled>Next</button>
 
 </div>
 
@@ -109,27 +135,52 @@ h1{
 const quiz=[
 {
 question:"What does HTML stand for?",
-options:["Hyper Text Markup Language","High Text Machine Language","Hyper Tool Markup Language","Home Tool Markup Language"],
+options:[
+"Hyper Text Markup Language",
+"High Text Machine Language",
+"Hyper Tool Markup Language",
+"Home Tool Markup Language"
+],
 answer:0
 },
 {
 question:"Which language is used for styling web pages?",
-options:["Python","HTML","CSS","Java"],
+options:[
+"Python",
+"HTML",
+"CSS",
+"Java"
+],
 answer:2
 },
 {
 question:"Which language adds interactivity to websites?",
-options:["JavaScript","C++","SQL","PHP"],
+options:[
+"JavaScript",
+"C++",
+"SQL",
+"PHP"
+],
 answer:0
 },
 {
 question:"Which tag creates a hyperlink?",
-options:["<img>","<a>","<p>","<div>"],
+options:[
+"<img>",
+"<a>",
+"<p>",
+"<div>"
+],
 answer:1
 },
 {
 question:"Inside which HTML element do we put JavaScript?",
-options:["<style>","<script>","<css>","<js>"],
+options:[
+"<style>",
+"<script>",
+"<css>",
+"<js>"
+],
 answer:1
 }
 ];
@@ -140,18 +191,26 @@ let score=0;
 const question=document.getElementById("question");
 const options=document.getElementById("options");
 const nextBtn=document.getElementById("nextBtn");
+const progress=document.getElementById("progress");
 const scoreText=document.getElementById("score");
 const restartBtn=document.getElementById("restartBtn");
 
 function loadQuestion(){
 
-question.innerHTML=quiz[current].question;
+nextBtn.disabled=true;
+
+progress.textContent=`Question ${current+1} of ${quiz.length}`;
+
+question.textContent=quiz[current].question;
+
 options.innerHTML="";
 
 quiz[current].options.forEach((opt,index)=>{
 
 let btn=document.createElement("button");
-btn.innerHTML=opt;
+
+btn.textContent=opt;
+
 btn.className="option";
 
 btn.onclick=function(){
@@ -170,7 +229,9 @@ document.querySelectorAll(".option")[quiz[current].answer].style.background="#22
 
 }
 
-}
+nextBtn.disabled=false;
+
+};
 
 options.appendChild(btn);
 
@@ -189,23 +250,29 @@ loadQuestion();
 }else{
 
 document.getElementById("quiz").style.display="none";
-scoreText.innerHTML="🎉 Your Score: "+score+" / "+quiz.length;
+
+scoreText.innerHTML=`🎉 You scored <b>${score}</b> out of <b>${quiz.length}</b>`;
+
 restartBtn.style.display="block";
 
 }
 
-}
+};
 
 restartBtn.onclick=function(){
 
 current=0;
 score=0;
+
 scoreText.innerHTML="";
+
 restartBtn.style.display="none";
+
 document.getElementById("quiz").style.display="block";
+
 loadQuestion();
 
-}
+};
 
 loadQuestion();
 
