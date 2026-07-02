@@ -10,7 +10,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
@@ -23,25 +23,17 @@ body{
 
 .container{
     width:90%;
-    max-width:550px;
+    max-width:500px;
     background:#1e293b;
+    padding:25px;
     border-radius:15px;
-    padding:20px;
-    box-shadow:0 0 20px rgba(0,0,0,.4);
-}
-
-.banner{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-    border-radius:12px;
-    margin-bottom:15px;
+    box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
 h1{
     color:#38bdf8;
     text-align:center;
-    margin-bottom:15px;
+    margin-bottom:20px;
 }
 
 #progress{
@@ -52,24 +44,26 @@ h1{
 
 #question{
     color:white;
-    margin-bottom:15px;
+    font-size:22px;
+    margin-bottom:20px;
 }
 
 .option{
+    display:block;
     width:100%;
     padding:12px;
-    margin:8px 0;
+    margin:10px 0;
     border:none;
     border-radius:8px;
     background:#334155;
     color:white;
-    font-size:16px;
     cursor:pointer;
     transition:.3s;
+    font-size:16px;
 }
 
-.option:hover{
-    background:#2563eb;
+.option:hover:not(:disabled){
+    background:#3b82f6;
 }
 
 .option:disabled{
@@ -94,21 +88,18 @@ h1{
 }
 
 #score{
-    text-align:center;
     color:#facc15;
-    font-size:24px;
+    text-align:center;
+    font-size:22px;
     margin-top:20px;
 }
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
-
-<img class="banner"
-src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800"
-alt="Quiz Banner">
 
 <h1>Quiz Game</h1>
 
@@ -133,6 +124,7 @@ alt="Quiz Banner">
 <script>
 
 const quiz=[
+
 {
 question:"What does HTML stand for?",
 options:[
@@ -143,6 +135,7 @@ options:[
 ],
 answer:0
 },
+
 {
 question:"Which language is used for styling web pages?",
 options:[
@@ -153,6 +146,7 @@ options:[
 ],
 answer:2
 },
+
 {
 question:"Which language adds interactivity to websites?",
 options:[
@@ -163,26 +157,29 @@ options:[
 ],
 answer:0
 },
+
 {
 question:"Which tag creates a hyperlink?",
 options:[
-"<img>",
-"<a>",
-"<p>",
-"<div>"
+"&lt;img&gt;",
+"&lt;a&gt;",
+"&lt;p&gt;",
+"&lt;div&gt;"
 ],
 answer:1
 },
+
 {
 question:"Inside which HTML element do we put JavaScript?",
 options:[
-"<style>",
-"<script>",
-"<css>",
-"<js>"
+"&lt;style&gt;",
+"&lt;script&gt;",
+"&lt;css&gt;",
+"&lt;js&gt;"
 ],
 answer:1
 }
+
 ];
 
 let current=0;
@@ -199,9 +196,9 @@ function loadQuestion(){
 
 nextBtn.disabled=true;
 
-progress.textContent=`Question ${current+1} of ${quiz.length}`;
+progress.innerHTML="Question "+(current+1)+" / "+quiz.length;
 
-question.textContent=quiz[current].question;
+question.innerHTML=quiz[current].question;
 
 options.innerHTML="";
 
@@ -209,7 +206,7 @@ quiz[current].options.forEach((opt,index)=>{
 
 let btn=document.createElement("button");
 
-btn.textContent=opt;
+btn.innerHTML=opt;
 
 btn.className="option";
 
@@ -231,7 +228,7 @@ document.querySelectorAll(".option")[quiz[current].answer].style.background="#22
 
 nextBtn.disabled=false;
 
-};
+}
 
 options.appendChild(btn);
 
@@ -251,13 +248,13 @@ loadQuestion();
 
 document.getElementById("quiz").style.display="none";
 
-scoreText.innerHTML=`🎉 You scored <b>${score}</b> out of <b>${quiz.length}</b>`;
+scoreText.innerHTML="🎉 Your Score: <b>"+score+"</b> / <b>"+quiz.length+"</b>";
 
 restartBtn.style.display="block";
 
 }
 
-};
+}
 
 restartBtn.onclick=function(){
 
@@ -272,7 +269,7 @@ document.getElementById("quiz").style.display="block";
 
 loadQuestion();
 
-};
+}
 
 loadQuestion();
 
